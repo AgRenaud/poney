@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "poney"
+version = "0.1.0"
+description = ""
+authors = ["Renaud Aguirre <renaud.aguirrechambilla@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+typer = {version = "^0.7.0", extras = ["all"]}
+
+[tool.poetry.group.dev.dependencies]
+maturin = "^0.14.10"
+ruff = "^0.0.235"
+black = "^22.12.0"
+
+
+[tool.poetry.group.test.dependencies]
+Flask = "^2.2.2"
+pytest = "^7.2.1"
+coverage = "^7.1.0"
+
+[tool.black]
+line-length = 120
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
