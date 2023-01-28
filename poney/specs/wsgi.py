@@ -76,5 +76,7 @@ class WSGIHandler:
         
         result = application(environ, self.start_response)
 
+        result = [r for r in result]
+
         return environ, result
 

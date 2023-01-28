@@ -1,5 +1,6 @@
 use pyo3::prelude::*;
 use pyo3::types::{PyDict, PyIterator, PyList, PyTuple};
+use std::collections::HashMap;
 use std::result::IntoIter;
 
 use std::{
@@ -190,15 +191,27 @@ impl Server {
         environ.set_item("wsgi.version", (1, 0))?;
 
         println!("Environ is setted up");
-        let args = (environ, request_handler);
 
-        //let response = self.application.invoke(args)?;
-        
         let request_handler = self.request_handler.clone();
 
-        let response = request_handler.call_method1(py, "run", self.application.clone())?;
-        
-        dbg!(response);
+        let application = self.application.as_ref();
+
+        let args = (application,);
+
+        let response = request_handler.call_method1(py, "run", args)?;
+        let response = response.downcast::<PyTuple>(py)?;
+
+        let response_headers = response.get_item(0)?;
+        let response_body = response.get_item(1)?;
+
+        let response_body = response_body.extract::<Vec<&[u8]>>()?;
+        dbg!(&response_body);
+
+        // Assume it is text for test
+        for message in response_body {
+            let message = std::str::from_utf8(&message).unwrap();
+            dbg!(&message);
+        }
 
         Ok(())
     }
