@@ -60,9 +60,6 @@ class WSGIHandler:
     def run(self, application):
         # environ must be provided by Rust
         environ = {k: unicode_to_wsgi(v) for k, v in os.environ.items()}
-        environ["wsgi.input"] = sys.stdin.buffer
-        environ["wsgi.errors"] = sys.stderr
-        environ["wsgi.version"] = (1, 0)
         environ["wsgi.multithread"] = False
         environ["wsgi.multiprocess"] = True
         environ["wsgi.run_once"] = True

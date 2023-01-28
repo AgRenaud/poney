@@ -4,7 +4,7 @@ from simple_app import AppClass, simple_app
 from flask_example import create_app
 
 from poney.specs.wsgi import WSGIHandler
-from poney import Server
+from poney import Worker
 
 
 class bcolors:
@@ -21,21 +21,21 @@ class bcolors:
 
 if __name__ == "__main__":
 
-    print("\n" + bcolors.OKCYAN + "# Run with Rust server and " + bcolors.OKBLUE + "Python App function" + bcolors.ENDC)
+    print("\n" + bcolors.OKCYAN + "# Run with Rust worker and " + bcolors.OKBLUE + "Python App function" + bcolors.ENDC)
     request_handler = WSGIHandler(sys.stdout.buffer)
-    server = Server(simple_app, request_handler)
+    worker = Worker(simple_app, request_handler)
 
-    server.run_with_cgi()
+    worker.run_with_cgi()
 
-    print("\n" + bcolors.OKCYAN + "# Run with Rust server and " + bcolors.OKGREEN + "Python App class" + bcolors.ENDC)
+    print("\n" + bcolors.OKCYAN + "# Run with Rust worker and " + bcolors.OKGREEN + "Python App class" + bcolors.ENDC)
     request_handler = WSGIHandler(sys.stdout.buffer)
-    server = Server(AppClass, request_handler)
+    worker = Worker(AppClass, request_handler)
 
-    server.run_with_cgi()
+    worker.run_with_cgi()
 
-    print("\n" + bcolors.OKCYAN + "# Run with Rust Server and " + bcolors.WARNING + "Flask" + bcolors.ENDC)
+    print("\n" + bcolors.OKCYAN + "# Run with Rust worker and " + bcolors.WARNING + "Flask" + bcolors.ENDC)
     request_handler = WSGIHandler(sys.stdout.buffer)
     application = create_app()
-    server = Server(application, request_handler)
+    worker = Worker(application, request_handler)
 
-    server.run_with_cgi()
+    worker.run_with_cgi()
