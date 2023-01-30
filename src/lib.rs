@@ -1,10 +1,12 @@
 mod pep3333;
+
 mod server;
+mod worker;
 
 use pyo3::prelude::*;
 
-use pep3333::Worker;
 use server::serve;
+use worker::Worker;
 
 #[pymodule]
 #[pyo3(name = "poney")]
