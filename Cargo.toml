@@ -10,4 +10,5 @@ crate-type = ["cdylib"]
 [dependencies]
 hyper = { version = "0.14.23", features = ["full"] }
 pyo3 = { version = "0.18.0", features = ["extension-module"] }
+regex = "1.7.1"
 tokio = { version = "1.24.2", features = ["full"] }
