@@ -19,7 +19,6 @@ struct WorkerPool {
 // TODO: pass the connection to the worker so that the worker can directly send the response to the client.
 //       Then
 impl WorkerPool {
-
     pub fn init_workers(n_workers: usize) -> Self {
         let pool = (0..n_workers).map(|_| Worker::init()).collect();
         Self { pool }
@@ -30,17 +29,17 @@ impl WorkerPool {
     }
 }
 
-pub struct PyServer {
+pub struct Hippodrome {
     address: String,
     port: String,
     worker_pool: WorkerPool,
 }
 
-impl PyServer {
+impl Hippodrome {
     pub fn new(address: String, port: String, n_worker: usize) -> Self {
         let worker_pool = WorkerPool::init_workers(n_worker);
 
-        PyServer {
+        Hippodrome {
             address,
             port,
             worker_pool,

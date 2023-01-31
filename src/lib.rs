@@ -1,8 +1,8 @@
 mod pep3333;
 
+mod application;
 mod server;
 mod worker;
-mod application;
 
 use pyo3::prelude::*;
 
