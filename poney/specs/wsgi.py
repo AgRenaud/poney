@@ -2,7 +2,7 @@ import io
 import os
 import sys
 
-from typing import Callable, List
+from typing import Callable
 
 
 enc, esc = sys.getfilesystemencoding(), "surrogateescape"
@@ -24,7 +24,6 @@ class WSGIHandler:
         self.socket = socket
         self.headers_sent = []
         self.headers_set = []
-
 
     def write(self, data: bytes) -> None:
         out = self.socket
@@ -70,10 +69,8 @@ class WSGIHandler:
         else:
             environ["wsgi.url_scheme"] = "http"
 
-        
         result = application(environ, self.start_response)
 
         result = [r for r in result]
 
         return environ, result
-
