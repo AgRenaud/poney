@@ -8,7 +8,7 @@ use tokio::io::{AsyncRead, AsyncWrite, Stdout};
 use tokio::runtime::Runtime;
 
 use hyper::service::{make_service_fn, service_fn};
-use hyper::{Body, Request, Response, Server};
+use hyper::{Body, Request, Response};
 
 use crate::worker::Worker;
 
@@ -29,18 +29,18 @@ impl WorkerPool {
     }
 }
 
-pub struct Hippodrome {
+pub struct Server {
     address: String,
     port: String,
     worker_pool: WorkerPool,
     server: Option<Server>
 }
 
-impl Hippodrome {
+impl Server {
     pub fn new(address: String, port: String, n_worker: usize) -> Self {
         let worker_pool = WorkerPool::init_workers(n_worker);
 
-        Hippodrome {
+        Server {
             address,
             port,
             worker_pool,
@@ -54,7 +54,7 @@ impl Hippodrome {
 
     pub fn start(&self) {
         
-        let server = Server::bind(self.address)
+        let server = hyper::Server::bind(self.address)
             .http1_only(true)
             .serve(make_svc)
             .with_graceful_shutdown(shutdown_server());
@@ -73,8 +73,6 @@ async fn handle_request(_req: Request<Body>) -> Result<Response<Body>, Infallibl
     Ok(Response::new("Hello, World".into()))
 }
 
-
-
 pub async fn shutdown_server() {
     let mut signal = tokio::signal::ctrl_c().await;
 
@@ -90,9 +88,9 @@ pub async fn run_server() -> Result<(), Box<dyn std::error::Error + Send + Sync>
 
     let addr = ([127, 0, 0, 1], 3000).into();
 
-    let hserver = Hippodrome::new(String::from("127.0.0.1", String::from("3001", 4)));
+    let hserver = Server::new(String::from("127.0.0.1", String::from("3001", 4)));
 
-    let server = Server::bind(&addr)
+    let server = hyper::Server::bind(&addr)
         .http1_only(true)
         .serve(make_svc)
         .with_graceful_shutdown(shutdown_server());
