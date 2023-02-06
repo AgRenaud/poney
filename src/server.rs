@@ -33,6 +33,7 @@ pub struct Hippodrome {
     address: String,
     port: String,
     worker_pool: WorkerPool,
+    server: Option<Server>
 }
 
 impl Hippodrome {
@@ -43,6 +44,7 @@ impl Hippodrome {
             address,
             port,
             worker_pool,
+            None
         }
     }
 
@@ -51,7 +53,13 @@ impl Hippodrome {
     }
 
     pub fn start(&self) {
-        todo!()
+        
+        let server = Server::bind(self.address)
+            .http1_only(true)
+            .serve(make_svc)
+            .with_graceful_shutdown(shutdown_server());
+
+        self.server = Some(server);
     }
 
     pub fn shutdown(&self) {
@@ -65,15 +73,7 @@ async fn handle_request(_req: Request<Body>) -> Result<Response<Body>, Infallibl
     Ok(Response::new("Hello, World".into()))
 }
 
-#[pyfunction]
-pub fn serve() -> PyResult<()> {
-    println!("Start server");
-    let mut rt = Runtime::new()?;
 
-    rt.block_on(async { run_server().await });
-
-    Ok(())
-}
 
 pub async fn shutdown_server() {
     let mut signal = tokio::signal::ctrl_c().await;
@@ -89,6 +89,8 @@ pub async fn run_server() -> Result<(), Box<dyn std::error::Error + Send + Sync>
         make_service_fn(|_conn| async { Ok::<_, Infallible>(service_fn(handle_request)) });
 
     let addr = ([127, 0, 0, 1], 3000).into();
+
+    let hserver = Hippodrome::new(String::from("127.0.0.1", String::from("3001", 4)));
 
     let server = Server::bind(&addr)
         .http1_only(true)

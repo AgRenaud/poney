@@ -8,7 +8,8 @@ name = "poney"
 crate-type = ["cdylib"]
 
 [dependencies]
-hyper = { version = "0.14.23", features = ["full"] }
+hyper = { version = "1.0.0-rc.2", features = ["full"] }
 pyo3 = { version = "0.18.0", features = ["extension-module"] }
 regex = "1.7.1"
 tokio = { version = "1.24.2", features = ["full"] }
+http-body-util = "0.1.0-rc.2" 
