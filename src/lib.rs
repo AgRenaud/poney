@@ -8,7 +8,6 @@ use pyo3::prelude::*;
 use tokio::runtime::Runtime;
 use worker::Worker;
 
-
 #[pymodule]
 #[pyo3(name = "poney")]
 fn import_module(_python: Python, module: &PyModule) -> PyResult<()> {

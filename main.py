@@ -23,19 +23,19 @@ if __name__ == "__main__":
 
     print("\n" + bcolors.OKCYAN + "# Run with Rust worker and " + bcolors.OKBLUE + "Python App function" + bcolors.ENDC)
     request_handler = WSGIHandler(sys.stdout.buffer)
-    worker = Worker(simple_app, request_handler)
+    worker = Worker(simple_app, request_handler, "127.0.0.1", 8000)
 
     worker.run_with_cgi()
 
     print("\n" + bcolors.OKCYAN + "# Run with Rust worker and " + bcolors.OKGREEN + "Python App class" + bcolors.ENDC)
     request_handler = WSGIHandler(sys.stdout.buffer)
-    worker = Worker(AppClass, request_handler)
+    worker = Worker(AppClass, request_handler, "127.0.0.1", 8000)
 
     worker.run_with_cgi()
 
     print("\n" + bcolors.OKCYAN + "# Run with Rust worker and " + bcolors.WARNING + "Flask" + bcolors.ENDC)
     request_handler = WSGIHandler(sys.stdout.buffer)
     application = create_app()
-    worker = Worker(application, request_handler)
+    worker = Worker(application, request_handler, "127.0.0.1", 8000)
 
     worker.run_with_cgi()

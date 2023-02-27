@@ -12,32 +12,15 @@ use hyper::{Body, Request, Response};
 
 use crate::worker::Worker;
 
-struct WorkerPool {
-    pool: Vec<Worker>,
-}
-
-// TODO: pass the connection to the worker so that the worker can directly send the response to the client.
-//       Then
-impl WorkerPool {
-    pub fn init_workers(n_workers: usize) -> Self {
-        let pool = (0..n_workers).map(|_| Worker::init()).collect();
-        Self { pool }
-    }
-
-    pub fn handle_resquest(&self, request: Request<()>) {
-        todo!()
-    }
-}
-
-pub struct Server {
-    address: String,
-    port: String,
+pub struct HttpServer {
+    name: String,
+    socket: Socket,
     worker_pool: WorkerPool,
     server: Option<Server>
 }
 
-impl Server {
-    pub fn new(address: String, port: String, n_worker: usize) -> Self {
+impl HttpServer {
+    pub fn new(name: String, address: String, port: String, n_worker: usize) -> Self {
         let worker_pool = WorkerPool::init_workers(n_worker);
 
         Server {
@@ -69,7 +52,6 @@ impl Server {
 
 async fn handle_request(_req: Request<Body>) -> Result<Response<Body>, Infallible> {
     dbg!(_req);
-
     Ok(Response::new("Hello, World".into()))
 }
 
