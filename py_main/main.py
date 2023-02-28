@@ -1,7 +1,7 @@
 import sys
 
-from simple_app import AppClass, simple_app
-from flask_example import create_app
+from example_apps.simple_app import AppClass, simple_app
+from example_apps.flask_example import create_app
 
 from poney.specs.wsgi import WSGIHandler
 from poney import Worker
